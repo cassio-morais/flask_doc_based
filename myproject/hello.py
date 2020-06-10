@@ -102,7 +102,7 @@ def about():
 # A funcao 'hello' que pertence a essas rotas retorna um render_template com 
 # a página que será renderizada mais as variaveis que vieram pela rota (ou nenhuma name=None ex.)
 # ao renderizar a página o Jinja entra em ação, ele já vai estar esperando o retorno com a página
-# e as variáveis, e lá ele irá tratár isso 
+# e as variáveis, e lá ele irá tratar isso (hello.html)
 
 
 @app.route('/hello/')
