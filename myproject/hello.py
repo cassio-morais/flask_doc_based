@@ -2,6 +2,7 @@ from flask import Flask
 from markupsafe import escape # adciona variaveis <variavel> que passa para a função como uma palavra-chave
 from flask import url_for
 from flask import render_template
+from flask import request
 
 app= Flask(__name__)
 
@@ -97,7 +98,8 @@ def about():
 
 # quando a url é chamada no exemplo abaixo, ela virá por duas rota possiveis:
 
-#              '/hello/' ou '/hello/<name> 
+#              conceito de rotas dinâmicas   
+#             '/hello/' ou '/hello/<name>'
 
 # A funcao 'hello' que pertence a essas rotas retorna um render_template com 
 # a página que será renderizada mais as variaveis que vieram pela rota (ou nenhuma name=None ex.)
@@ -111,6 +113,55 @@ def hello(name=None):
     return render_template('hello.html', name=name)
 
 # Como ele apenas renderiza o html, ele não trata o if aqui, apenas diretamente no html com o jinja
+
+
+#MARKUP
+
+
+# Here is a basic introduction to how the Markup class works:
+
+# Ele implementa uma segurança ao código https://github.com/pallets/markupsafe
+
+# Markup('<strong>Hello %s!</strong>') % '<blink>hacker</blink>'
+#       Markup('<strong>Hello &lt;blink&gt;hacker&lt;/blink&gt;!</strong>')
+# Markup.escape('<blink>hacker</blink>')
+#       Markup('&lt;blink&gt;hacker&lt;/blink&gt;')
+# Markup('<em>Marked up</em> &raquo; HTML').striptags()
+#       'Marked up » HTML'
+
+
+# THE REQUEST OBJECT
+
+# abaixo um teste de requisica para validar os dados passados usando o atributo 'method'
+# que vem na requisicao. Se ela for 'POST' e se os dados sao validos, retorna a o resultado da funcao 'log_the_user_in'
+# senão, ele sobe um erro, sai do if e renderiza o template de login com o error.
+
+# @app.route('/login', methods=['POST', 'GET'])
+# def login():
+#     error = None
+#     if request.method == 'POST':
+#         if valid_login(request.form['username'],
+#                        request.form['password']):
+#             return log_the_user_in(request.form['username'])
+#         else:
+#             error = 'Invalid username/password'
+#     # the code below is executed if the request method
+#     # was GET or the credentials were invalid
+#     return render_template('login.html', error=error)
+
+
+# FILE UPLOADS
+
+#  Just make sure not to forget to set the enctype="multipart/form-data" attribute on your HTML form, 
+#  otherwise the browser will not transmit your files at all.
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        f = request.files['the_file']
+        f.save('/var/www/uploads/uploaded_file.txt')
+    ...
 
 
 if __name__=='__main__':
